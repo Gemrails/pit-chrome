@@ -1,7 +1,7 @@
 import {polyfill} from 'es6-promise';
 polyfill();
 
-const BASE_URL = "http://127.0.0.1:5000";
+const BASE_URL = "http://doc.guojibu888.com/index.php?";
 
 export const fetchCsrf = (getCsrfUrl) => {
   return new Promise((resolve, reject) => {
@@ -25,6 +25,7 @@ export const validateEmail = (email) => {
 
 export const getValidateEmail = (targetId) => {
   var email = document.getElementById(targetId).value;
+    return email;
   if (email && validateEmail(email)) {
     return email;
   }
@@ -33,20 +34,26 @@ export const getValidateEmail = (targetId) => {
 
 export const getValidatePassword = (targetId) => {
   var password = document.getElementById(targetId).value;
-  if (password && password.length >= 8) {
+    return password;
+    if (password && password.length >= 8) {
     return password;
   }
   return false
 };
 
 export const signupOrLogin = (url, data) => {
+    data = Object.assign(data, {
+        isAjax: 1,
+        checkCode: undefined,
+        rememberPassword: 0
+    })
   return new Promise((resolve, reject) => {
     $.ajax({
       url: `${BASE_URL}${url}`,
       data,
-      method: 'post',
+      method: 'get',
       success: (data) => {
-        if (data.success) {
+        if (data.code) {
           resolve(data.data);
         } else {
           reject(false);
@@ -93,7 +100,7 @@ export const postCliper = (data) => {
       },
       data,
       success: (data) => {
-        if (data.success) {
+        if (data.code) {
           resolve(true);
         } else {
           reject(false);

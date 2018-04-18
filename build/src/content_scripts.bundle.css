@@ -1,2 +1,55 @@
-.cliper_notification{position:fixed;top:20px;right:20px;width:250px;height:90px;border-radius:2px;background-color:#fff;color:#343434;transition:all .4s cubic-bezier(.165,.84,.44,1);box-shadow:0 4px 4px 0 rgba(0,0,0,.12),0 0 4px 0 rgba(0,0,0,.08);-webkit-box-shadow:0 4px 4px 0 rgba(0,0,0,.12),0 0 4px 0 rgba(0,0,0,.08);transform:translateX(120%);-webkit-transform:translateX(120%);opacity:0;font-size:14px;z-index:1000000000000000000!important}.cliper_notification.active{opacity:1;transform:translateX(0);-webkit-transform:translateX(0)}.notification_content,.notification_title{height:50px;line-height:50px;padding:0 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}.notification_content{color:#1e88e5}.notification_title{font-size:12px;font-weight:800;height:40px;line-height:40px;border-bottom:1px solid #f0f0f0}
-/*# sourceMappingURL=content_scripts.bundle.css.map*/
+.cliper_notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 250px;
+  height: 90px;
+  border-radius: 2px;
+  background-color: #fff;
+  color: #343434;
+  -webkit-transition: all .4s cubic-bezier(.165,.84,.44,1);
+  transition: all .4s cubic-bezier(.165,.84,.44,1);
+  box-shadow: 0 4px 4px 0 rgba(0,0,0,.12),0 0 4px 0 rgba(0,0,0,.08);
+  -webkit-box-shadow: 0 4px 4px 0 rgba(0,0,0,.12),0 0 4px 0 rgba(0,0,0,.08);
+  transform: translateX(120%);
+  -webkit-transform: translateX(120%);
+  opacity: 0;
+  font-size: 14px;
+  z-index: 999999999999999999 !important;
+}
+
+.cliper_notification.active {
+  opacity: 1;
+  transform: translateX(0%);
+  -webkit-transform: translateX(0%);
+}
+
+.notification_content,
+.notification_title {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.notification_content {
+  color: #1E88E5;
+}
+
+.notification_title {
+  font-size: 12px;
+  font-weight: 800;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #f0f0f0;
+}
+div.tagsinput { border:1px solid #CCC; background: #FFF; padding:5px; width:300px; height:100px; overflow-y: auto;}
+div.tagsinput span.tag { border: 1px solid #a5d24a; -moz-border-radius:2px; -webkit-border-radius:2px; display: block; float: left; padding: 5px; text-decoration:none; background: #cde69c; color: #638421; margin-right: 5px; margin-bottom:5px;font-family: helvetica;  font-size:13px;}
+div.tagsinput span.tag a { font-weight: bold; color: #82ad2b; text-decoration:none; font-size: 11px;  } 
+div.tagsinput input { width:80px; margin:0px; font-family: helvetica; font-size: 13px; border:1px solid transparent; padding:5px; background: transparent; color: #000; outline:0px;  margin-right:5px; margin-bottom:5px; }
+div.tagsinput div { display:block; float: left; } 
+.tags_clear { clear: both; width: 100%; height: 0px; }
+.not_valid {background: #FBD8DB !important; color: #90111A !important;}
