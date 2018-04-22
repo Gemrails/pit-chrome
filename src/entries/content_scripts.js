@@ -4,6 +4,8 @@ import Selection from '../js/selection';
 import '../tagAdder/jquery.tagsinput';
 import '../tagAdder/jquery.tagsinput.css';
 
+console.log('init')
+
 const notification = new Notification();
 notification.listen();
 

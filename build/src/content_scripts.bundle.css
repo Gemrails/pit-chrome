@@ -1,7 +1,7 @@
 .cliper_notification {
   position: fixed;
   top: 20px;
-  right: 20px;
+  right: 80px;
   width: 250px;
   height: 90px;
   border-radius: 2px;
@@ -45,6 +45,35 @@
   height: 40px;
   line-height: 40px;
   border-bottom: 1px solid #f0f0f0;
+}
+
+.btn_con{
+  margin: 6px 0 0;
+  position: relative;
+  width: 312px;
+  height: 32px;
+}
+
+#confirm{
+  position: absolute;
+  left: 0;
+  border-radius: 6px;
+  width: 60px;
+  height: 28px;
+  border: 1px solid #f1f1f1;
+  background-color: #008000;
+  color: #fff;
+}
+
+#cancel{
+  position: absolute;
+  right: 0;
+  border-radius: 6px;
+  width: 60px;
+  height: 28px;
+  border: 1px solid #f1f1f1;
+  background-color: #ff0000;
+  color: #fff;
 }
 div.tagsinput { border:1px solid #CCC; background: #FFF; padding:5px; width:300px; height:100px; overflow-y: auto;}
 div.tagsinput span.tag { border: 1px solid #a5d24a; -moz-border-radius:2px; -webkit-border-radius:2px; display: block; float: left; padding: 5px; text-decoration:none; background: #cde69c; color: #638421; margin-right: 5px; margin-bottom:5px;font-family: helvetica;  font-size:13px;}
