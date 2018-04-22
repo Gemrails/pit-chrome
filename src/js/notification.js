@@ -6,15 +6,14 @@ class Notification {
 
     listen() {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-            console.log('get message')
             if (message.method === 'add_cliper_success') {
                 this._showNotification(message.data);
             }
             if (message.method === 'add_tag') {
-                console.log(message)
-                console.log('how?')
                 this._showTagAdder().then(res => {
-                    sendResponse(res)
+                    if(res.length){
+                        sendResponse(res)
+                    }
                 })
             }
             return true
@@ -42,11 +41,10 @@ class Notification {
     }
 
     tagTemplate() {
-        return `<div id="tag_temp" class='cliper_notification'><input name="tags" id="tags" value="" /><button id="confirm">确定</button><button id="cancel">取消</button></div>`
+        return `<div id="tag_temp" class='cliper_notification'><input name="tags" id="tags" value="" /><div class="btn_con"><button id="confirm">确定</button><button id="cancel">取消</button></div></div>`
     }
 
     _showTagAdder() {
-        console.log('run it?')
         const query = document.getElementById('tags');
         if(!query){
             const $tagTemp = $(this.tagTemplate());
@@ -77,10 +75,9 @@ class Notification {
 
     _AdderCallBack(action) {
         console.log(`action is ${action}`)
-        this._removeTagAdder()
         if (action === 'confirm') {
-            console.log(this.tags)
-            this.currentMsg.resolve(true)
+            this.currentMsg.resolve(this.tags)
+            this.tags = []
         } else {
             this.currentMsg.resolve(false)
         }

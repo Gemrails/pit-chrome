@@ -5,15 +5,16 @@ import {
 
 class Background {
     constructor() {
-        this.userId = '';
+        this.admin_name = '';
         this.selectionObj = null;
         this._handleMenuClick = this._handleMenuClick.bind(this);
     }
 
     initial() {
         chrome.storage.sync.get('user', (result) => {
-            const userObj = result.user;
-            this.userId = userObj && userObj.objectId;
+            if(!!result){
+                this.admin_name = result.user
+            }
         });
         this._initialContextMenus();
         this._listenStorage();
@@ -28,20 +29,24 @@ class Background {
         return true;
     }
 
-    _postCliper() {
-        this._addNewCliper();
+    _postCliper(tags) {
+        this._addNewCliper(tags);
     }
 
-    _addNewCliper() {
+    _addNewCliper(tags) {
         let cliper = this.selectionObj;
+        console.log(this.selectionObj)
         this._sendSuccessMessage(cliper.title);
 
-        cliper['userId'] = this.userId;
+        cliper['admin_name'] = this.admin_name || 'xxxxxx';
+        cliper['tags'] = tags.join(',');
         const data = {
             cliper
         };
-        postCliper(data).then((success) => {
+        postCliper(data).then(res => {
             this.selectionObj = null;
+        }, err => {
+            console.error(err)
         });
     }
 
@@ -70,6 +75,7 @@ class Background {
                 {active: true, currentWindow: true},
                 (tabs) => {
                     chrome.tabs.sendMessage(tabs[0].id, message, (response) => {
+                        console.log(response)
                         resolve(response)
                     });
                 }
@@ -84,8 +90,8 @@ class Background {
             if (info.menuItemId === 'save_page' || info.menuItemId === 'save_selection') {
                 this._addTagBeforePostCliper().then(msg => {
                   if(msg){
-                      console.log('发送请求')
-                      this._postCliper();
+                      console.log(msg)
+                      this._postCliper(msg);
                   }else{
                       // user cancelled this operation -。- and will not handled
                   }
@@ -117,7 +123,6 @@ class Background {
                 if (key === 'user') {
                     const storageChange = changes[key];
                     const userObj = storageChange.newValue;
-                    this.userId = userObj && userObj.objectId;
                 }
             });
         });

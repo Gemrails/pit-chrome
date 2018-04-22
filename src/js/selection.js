@@ -13,11 +13,10 @@ class Selection {
 
   _getSelectionMessage() {
     const text = this._getSelectedText();
-    const title = document.title;
     const url = window.location.href;
     const data = {
       text: this._base64Encode(text),
-      title: this._base64Encode(title),
+      title: `${window.location.host}_${JSON.stringify(new Date().getTime())}`,
       url: this._base64Encode(url)
     };
     let message = {

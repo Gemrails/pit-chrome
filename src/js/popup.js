@@ -1,20 +1,15 @@
 import {
-    fetchCsrf,
     signupOrLogin,
-    fetchUserInfo,
-    validateEmail,
     getValidateEmail,
     getValidatePassword
 } from './utils';
 
 class Popup {
     constructor() {
-        this.csrf = '';
-        // this._fetchCsrf();
+        this._fetchUserInfo();
         this._signUp = this._signUp.bind(this);
         this._login = this._login.bind(this);
         this._submit = this._submit.bind(this);
-        this._toggleLoading(false)
     }
 
     initialDOM() {
@@ -22,33 +17,19 @@ class Popup {
         return this;
     }
 
-    _fetchCsrf() {
-        fetchCsrf().then((csrf) => {
-            this.csrf = csrf;
-        });
-    }
-
-    _fetchUserInfo(userId) {
-        if (userId === null) {
-            chrome.storage.sync.get('user', (result) => {
-                if (result && result.user) {
-                    fetchUserInfo(result.user.objectId).then((data) => {
-                        $('.user_info').text(data);
-                    });
-                }
-            });
-            return;
-        }
-        fetchUserInfo(userId).then((data) => {
-            $('.user_info').text(data);
+    _fetchUserInfo() {
+        chrome.storage.sync.get('user', (result) => {
+            if (result) {
+                this._setPopDOM(result.user)
+            }
         });
     }
 
     _bindAction() {
         // signup
-        document.getElementById('cliper_signup').onclick = () => {
-            this._submit(this._signUp);
-        }
+        // document.getElementById('cliper_signup').onclick = () => {
+        //     this._submit(this._signUp);
+        // }
         // login
         document.getElementById('cliper_login').onclick = () => {
             this._submit(this._login);
@@ -83,7 +64,7 @@ class Popup {
             name,
             password
         };
-        this._userSignupOrLogin('', data);
+        this._userSignupOrLogin('', data, name);
     }
 
     _login(name, password) {
@@ -91,7 +72,7 @@ class Popup {
             name,
             password
         };
-        this._userSignupOrLogin('user/loginSubmit', data);
+        this._userSignupOrLogin('user/loginSubmit', data, name);
     }
 
     _logout() {
@@ -100,25 +81,25 @@ class Popup {
         });
     }
 
-    _userSignupOrLogin(url, data) {
-        this._toggleLoading(true);
+    _userSignupOrLogin(url, data, admin_name) {
         signupOrLogin(url, data).then((user) => {
-            console.log('1111111111')
-            chrome.storage.sync.set({user: user}, (result) => {});
-            this._setPopDOM(user);
+            chrome.storage.sync.set({user: admin_name}, (result) => {
+                this._setPopDOM(admin_name);
+            });
+            this._toggleLoading(true);
         }).catch((err) => {
             this._toggleLoading(false);
         });
     }
 
-    _setPopDOM(user) {
+    _setPopDOM(admin_name) {
+        console.log(admin_name)
         const userform = document.getElementById('cliper_userform');
         const userinfo = document.getElementById('cliper_userinfo');
-        if (user && user.username) {
+        if (admin_name) {
             userform.className = "disabled";
             userinfo.className = "active";
-            $('.user_name').text(user.username);
-            this._fetchUserInfo(user.objectId);
+            $('.user_name').text(admin_name);
         } else {
             userform.className = "active";
             userinfo.className = "disabled";
