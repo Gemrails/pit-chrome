@@ -4,14 +4,15 @@ class Notification {
         this.tags = []
     }
 
-    listen() {
+    listen(selection) {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (message.method === 'add_cliper_success') {
                 this._showNotification(message.data);
             }
             if (message.method === 'add_tag') {
-                this._showTagAdder().then(res => {
-                    sendResponse(res)
+                this._showTagAdder().then(data => {
+                    let resData = selection.getFullPageMixTag(data)
+                    sendResponse(resData)
                 })
             }
             return true

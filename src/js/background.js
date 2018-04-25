@@ -14,22 +14,8 @@ class Background {
             }
         });
         this._initialContextMenus();
-        this._listenStorage();
         this._listenMessage();
-    }
-
-    _postCliper(tags) {
-        let cliper = this.selectionObj
-
-        cliper['admin_name'] = this.admin_name || 'xxxxxx'
-        cliper['tags'] = tags.join(',')
-        const data = { cliper }
-        postCliper(data).then(res => {
-            this._sendSuccessMessage(cliper.title)
-            this.selectionObj = null;
-        }, err => {
-            console.error(err)
-        });
+        this._listenStorage();
     }
 
     _sendSuccessMessage(title) {
@@ -64,15 +50,32 @@ class Background {
         })
     }
 
+    _postCliper(pageData) {
+        const data = {
+            text: pageData.text,
+            title: pageData.title,
+            url: pageData.url,
+            admin_name: this.admin_name || 'xxxxxx',
+            tags: pageData.tags
+        }
+
+        postCliper(data).then(res => {
+            this._sendSuccessMessage(this.selectionObj.title)
+            this.selectionObj = null;
+        }, err => {
+            console.error(err)
+        });
+    }
+
     _handleMenuClick(info) {
-        if (info.menuItemId === 'save_page' || info.menuItemId === 'save_selection') {
-            this._addTagBeforePostCliper().then(msg => {
-                if(msg){
-                    this._postCliper(msg);
-                }else{
-                    // user cancelled this operation -。- and will not handled
-                }
+        if (info.menuItemId === 'save_page') {
+            this._addTagBeforePostCliper().then(data => {
+                this._postCliper(data);
             })
+        }
+
+        if(info.menuItemId === 'save_selection') {
+            this._postCliper(this.selectionObj);
         }
     }
 
@@ -97,20 +100,15 @@ class Background {
         chrome.storage.onChanged.addListener((changes, namespace) => {
             Object.keys(changes).forEach((key) => {
                 if (key === 'user') {
-                    const storageChange = changes[key];
-                    const userObj = storageChange.newValue;
+                    // do nothing
                 }
             });
         });
     }
 
-    _base64Encode(text) {
-        return btoa(encodeURIComponent(text));
-    }
-
     _listenMessage() {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-            if (message.method === 'get_selection' || message.method === 'get_page') {
+            if (message.method === 'get_selection') {
                 this.selectionObj = message.data;
             }
         });
