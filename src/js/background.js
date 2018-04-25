@@ -100,7 +100,8 @@ class Background {
         chrome.storage.onChanged.addListener((changes, namespace) => {
             Object.keys(changes).forEach((key) => {
                 if (key === 'user') {
-                    // do nothing
+                    const storageChange = changes[key];
+                    this.admin_name = storageChange.newValue
                 }
             });
         });
