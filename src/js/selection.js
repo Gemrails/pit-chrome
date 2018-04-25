@@ -34,6 +34,8 @@ class Selection {
             url: window.location.href,
             tags: tags.join(',')
         }
+        let tagDom = document.getElementById("tag_Adder")
+        page_dom.getElementsByTagName("body")[0].removeChild(tagDom)
         return data
     }
 
