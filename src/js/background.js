@@ -30,20 +30,13 @@ class Background {
     }
 
     _postCliper(tags) {
-        this._addNewCliper(tags);
-    }
+        let cliper = this.selectionObj
 
-    _addNewCliper(tags) {
-        let cliper = this.selectionObj;
-        console.log(this.selectionObj)
-        this._sendSuccessMessage(cliper.title);
-
-        cliper['admin_name'] = this.admin_name || 'xxxxxx';
-        cliper['tags'] = tags.join(',');
-        const data = {
-            cliper
-        };
+        cliper['admin_name'] = this.admin_name || 'xxxxxx'
+        cliper['tags'] = tags.join(',')
+        const data = { cliper }
         postCliper(data).then(res => {
+            this._sendSuccessMessage(cliper.title)
             this.selectionObj = null;
         }, err => {
             console.error(err)
@@ -75,7 +68,6 @@ class Background {
                 {active: true, currentWindow: true},
                 (tabs) => {
                     chrome.tabs.sendMessage(tabs[0].id, message, (response) => {
-                        console.log(response)
                         resolve(response)
                     });
                 }
@@ -90,7 +82,6 @@ class Background {
             if (info.menuItemId === 'save_page' || info.menuItemId === 'save_selection') {
                 this._addTagBeforePostCliper().then(msg => {
                   if(msg){
-                      console.log(msg)
                       this._postCliper(msg);
                   }else{
                       // user cancelled this operation -。- and will not handled

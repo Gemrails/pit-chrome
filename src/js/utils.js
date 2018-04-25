@@ -46,7 +46,7 @@ export const signupOrLogin = (url, data) => {
         }
       },
       error: (err) => {
-        console.log(err);
+        console.error(err);
         reject(false);
       }
     });

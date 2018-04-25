@@ -93,7 +93,6 @@ class Popup {
     }
 
     _setPopDOM(admin_name) {
-        console.log(admin_name)
         const userform = document.getElementById('cliper_userform');
         const userinfo = document.getElementById('cliper_userinfo');
         if (admin_name) {
