@@ -1,7 +1,4 @@
-import {
-    fetchCsrf,
-    postCliper
-} from './utils';
+import { postCliper } from './utils';
 
 class Background {
     constructor() {
@@ -19,14 +16,6 @@ class Background {
         this._initialContextMenus();
         this._listenStorage();
         this._listenMessage();
-    }
-
-    _checkCanCliper() {
-        if (!this.selectionObj) {
-            alert('has no selection');
-            return false;
-        }
-        return true;
     }
 
     _postCliper(tags) {
@@ -76,18 +65,14 @@ class Background {
     }
 
     _handleMenuClick(info) {
-        //const result = this._checkCanCliper();
-        const result = true
-        if (result) {
-            if (info.menuItemId === 'save_page' || info.menuItemId === 'save_selection') {
-                this._addTagBeforePostCliper().then(msg => {
-                  if(msg){
-                      this._postCliper(msg);
-                  }else{
-                      // user cancelled this operation -。- and will not handled
-                  }
-                })
-            }
+        if (info.menuItemId === 'save_page' || info.menuItemId === 'save_selection') {
+            this._addTagBeforePostCliper().then(msg => {
+                if(msg){
+                    this._postCliper(msg);
+                }else{
+                    // user cancelled this operation -。- and will not handled
+                }
+            })
         }
     }
 
@@ -125,11 +110,8 @@ class Background {
 
     _listenMessage() {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-            if (message.method === 'get_selection' || message.method === 'get_page' || message.method === 'save_cliper') {
+            if (message.method === 'get_selection' || message.method === 'get_page') {
                 this.selectionObj = message.data;
-            }
-            if (message.method === 'save_cliper' && this._checkCanCliper()) {
-                this._postCliper();
             }
         });
     }

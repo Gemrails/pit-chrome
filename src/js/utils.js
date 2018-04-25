@@ -1,4 +1,4 @@
-import {polyfill} from 'es6-promise';
+import { polyfill } from 'es6-promise';
 polyfill();
 
 const BASE_URL = "http://doc.guojibu888.com/index.php?";
