@@ -4,16 +4,15 @@ class Notification {
         this.tags = []
     }
 
-    listen() {
+    listen(selection) {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             if (message.method === 'add_cliper_success') {
                 this._showNotification(message.data);
             }
             if (message.method === 'add_tag') {
-                this._showTagAdder().then(res => {
-                    if(res.length){
-                        sendResponse(res)
-                    }
+                this._showTagAdder().then(data => {
+                    let resData = selection.getFullPageMixTag(data)
+                    sendResponse(resData)
                 })
             }
             return true
@@ -25,18 +24,18 @@ class Notification {
     }
 
     _showNotification(title) {
-        const $notification = $(this.notificationTemplate(title));
-        $('body').append($notification);
-        $notification.addClass('active');
+        const $notification = $(this.notificationTemplate(title))
+        $('body').append($notification)
+        $notification.addClass('active')
         setTimeout(() => {
-            this._removeNotification($notification);
+            this._removeNotification($notification)
         }, 3500);
     }
 
     _removeNotification($target) {
-        $target.removeClass('active');
+        $target.removeClass('active')
         setTimeout(() => {
-            $target.remove();
+            $target.remove()
         }, 500);
     }
 
@@ -45,11 +44,11 @@ class Notification {
     }
 
     _showTagAdder() {
-        const query = document.getElementById('tags');
+        const query = document.getElementById('tags')
         if(!query){
-            const $tagTemp = $(this.tagTemplate());
-            $('body').append($tagTemp);
-            $tagTemp.addClass('active');
+            const $tagTemp = $(this.tagTemplate())
+            $('body').append($tagTemp)
+            $tagTemp.addClass('active')
             $('#tags').tagsInput({
                 onAddTag: (res) => {
                     this.tags.push(res)
@@ -74,21 +73,21 @@ class Notification {
     }
 
     _AdderCallBack(action) {
-        console.log(`action is ${action}`)
         if (action === 'confirm') {
             this.currentMsg.resolve(this.tags)
             this.tags = []
         } else {
             this.currentMsg.resolve(false)
         }
+        this._removeTagAdder()
     }
 
     _removeTagAdder() {
-        $('#tag_temp').removeClass('active');
+        $('#tag_temp').removeClass('active')
         setTimeout(() => {
-            $('#tag_temp').remove();
+            $('#tag_temp').remove()
         }, 500);
     }
 }
 
-export default Notification;
+export default Notification

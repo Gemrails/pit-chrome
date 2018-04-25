@@ -4,10 +4,8 @@ import Selection from '../js/selection';
 import '../tagAdder/jquery.tagsinput';
 import '../tagAdder/jquery.tagsinput.css';
 
-console.log('init')
+const selection = new Selection();
+selection.listenMouseUp();
 
 const notification = new Notification();
-notification.listen();
-
-const selection = new Selection();
-selection.listenKeyDown().listenMouseUp();
+notification.listen(selection);

@@ -1,7 +1,4 @@
-import {
-    fetchCsrf,
-    postCliper
-} from './utils';
+import { postCliper } from './utils';
 
 class Background {
     constructor() {
@@ -17,37 +14,8 @@ class Background {
             }
         });
         this._initialContextMenus();
-        this._listenStorage();
         this._listenMessage();
-    }
-
-    _checkCanCliper() {
-        if (!this.selectionObj) {
-            alert('has no selection');
-            return false;
-        }
-        return true;
-    }
-
-    _postCliper(tags) {
-        this._addNewCliper(tags);
-    }
-
-    _addNewCliper(tags) {
-        let cliper = this.selectionObj;
-        console.log(this.selectionObj)
-        this._sendSuccessMessage(cliper.title);
-
-        cliper['admin_name'] = this.admin_name || 'xxxxxx';
-        cliper['tags'] = tags.join(',');
-        const data = {
-            cliper
-        };
-        postCliper(data).then(res => {
-            this.selectionObj = null;
-        }, err => {
-            console.error(err)
-        });
+        this._listenStorage();
     }
 
     _sendSuccessMessage(title) {
@@ -75,7 +43,6 @@ class Background {
                 {active: true, currentWindow: true},
                 (tabs) => {
                     chrome.tabs.sendMessage(tabs[0].id, message, (response) => {
-                        console.log(response)
                         resolve(response)
                     });
                 }
@@ -83,20 +50,32 @@ class Background {
         })
     }
 
+    _postCliper(pageData) {
+        const data = {
+            text: pageData.text,
+            title: pageData.title,
+            url: pageData.url,
+            admin_name: this.admin_name || 'xxxxxx',
+            tags: pageData.tags
+        }
+
+        postCliper(data).then(res => {
+            this._sendSuccessMessage(this.selectionObj.title)
+            this.selectionObj = null;
+        }, err => {
+            console.error(err)
+        });
+    }
+
     _handleMenuClick(info) {
-        //const result = this._checkCanCliper();
-        const result = true
-        if (result) {
-            if (info.menuItemId === 'save_page' || info.menuItemId === 'save_selection') {
-                this._addTagBeforePostCliper().then(msg => {
-                  if(msg){
-                      console.log(msg)
-                      this._postCliper(msg);
-                  }else{
-                      // user cancelled this operation -。- and will not handled
-                  }
-                })
-            }
+        if (info.menuItemId === 'save_page') {
+            this._addTagBeforePostCliper().then(data => {
+                this._postCliper(data);
+            })
+        }
+
+        if(info.menuItemId === 'save_selection') {
+            this._postCliper(this.selectionObj);
         }
     }
 
@@ -121,24 +100,16 @@ class Background {
         chrome.storage.onChanged.addListener((changes, namespace) => {
             Object.keys(changes).forEach((key) => {
                 if (key === 'user') {
-                    const storageChange = changes[key];
-                    const userObj = storageChange.newValue;
+                    // do nothing
                 }
             });
         });
     }
 
-    _base64Encode(text) {
-        return btoa(encodeURIComponent(text));
-    }
-
     _listenMessage() {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-            if (message.method === 'get_selection' || message.method === 'get_page' || message.method === 'save_cliper') {
+            if (message.method === 'get_selection') {
                 this.selectionObj = message.data;
-            }
-            if (message.method === 'save_cliper' && this._checkCanCliper()) {
-                this._postCliper();
             }
         });
     }

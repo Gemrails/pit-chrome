@@ -5,6 +5,4 @@ import Popup from '../js/popup';
 $(() => {
   const popup = new Popup();
   popup.initialDOM();
-
-  console.log('popuped')
 })

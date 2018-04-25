@@ -26,10 +26,6 @@ class Popup {
     }
 
     _bindAction() {
-        // signup
-        // document.getElementById('cliper_signup').onclick = () => {
-        //     this._submit(this._signUp);
-        // }
         // login
         document.getElementById('cliper_login').onclick = () => {
             this._submit(this._login);
@@ -93,7 +89,6 @@ class Popup {
     }
 
     _setPopDOM(admin_name) {
-        console.log(admin_name)
         const userform = document.getElementById('cliper_userform');
         const userinfo = document.getElementById('cliper_userinfo');
         if (admin_name) {
