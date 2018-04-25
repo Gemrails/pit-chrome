@@ -51,7 +51,7 @@ class Background {
     }
 
     _postCliper(pageData) {
-        const data = {
+        const cliper = {
             text: pageData.text,
             title: pageData.title,
             url: pageData.url,
@@ -59,7 +59,7 @@ class Background {
             tags: pageData.tags
         }
 
-        postCliper(data).then(res => {
+        postCliper({cliper}).then(res => {
             this._sendSuccessMessage(this.selectionObj.title)
             this.selectionObj = null;
         }, err => {

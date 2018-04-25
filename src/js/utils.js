@@ -2,8 +2,7 @@ import { polyfill } from 'es6-promise';
 polyfill();
 
 const BASE_URL = "http://doc.guojibu888.com/index.php?";
-const STORE_URL = "http://192.168.199.121:5000";
-
+const STORE_URL = "http://doc.guojibu888.com";
 
 export const validateEmail = (email) => {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
@@ -63,11 +62,7 @@ export const postCliper = (data) => {
             },
             data,
             success: (data) => {
-                if (data.code) {
-                    resolve(true);
-                } else {
-                    reject(false);
-                }
+                resolve(true);
             },
             error: (err) => {
                 console.error(err);
